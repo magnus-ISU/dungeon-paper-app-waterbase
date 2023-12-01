@@ -14,7 +14,7 @@ import 'package:flutter/material.dart';
 
 import 'package:get/get.dart';
 
-enum _XPAction { endSession, levelUp, overrideXP }
+enum _XPAction { endSession, levelUp, overwriteXP }
 
 class EXPDialog extends StatefulWidget {
   const EXPDialog({super.key});
@@ -24,8 +24,8 @@ class EXPDialog extends StatefulWidget {
 }
 
 class _EXPDialogState extends State<EXPDialog> with CharacterServiceMixin {
-  late TextEditingController overrideXp;
-  late TextEditingController overrideLevel;
+  late TextEditingController overwriteXp;
+  late TextEditingController overwriteLevel;
   late List<SessionMark> eosMarks;
   bool manualExpExpanded = false;
   bool shouldResetSessionMarks = false;
@@ -33,14 +33,14 @@ class _EXPDialogState extends State<EXPDialog> with CharacterServiceMixin {
 
   final endSessionCollapseController = CustomExpansionTileController();
   final levelUpCollapseController = CustomExpansionTileController();
-  final overrideXPCollapseController = CustomExpansionTileController();
+  final overwriteXPCollapseController = CustomExpansionTileController();
   _XPAction action = _XPAction.endSession;
   late CustomExpansionTileController lastActionController;
 
   @override
   void initState() {
-    overrideXp = TextEditingController(text: char.currentXp.toString())..addListener(() => setState(() {}));
-    overrideLevel = TextEditingController(text: currentLevel.toString())..addListener(() => setState(() {}));
+    overwriteXp = TextEditingController(text: char.currentXp.toString())..addListener(() => setState(() {}));
+    overwriteLevel = TextEditingController(text: currentLevel.toString())..addListener(() => setState(() {}));
     eosMarks = char.endOfSessionMarks;
     lastActionController = endSessionCollapseController;
     var maxStat = -2147483648; // Lazy way to avoid dealing with max/min, if the first stat was 18 for example
@@ -56,8 +56,8 @@ class _EXPDialogState extends State<EXPDialog> with CharacterServiceMixin {
 
   @override
   void dispose() {
-    overrideLevel.dispose();
-    overrideXp.dispose();
+    overwriteLevel.dispose();
+    overwriteXp.dispose();
     super.dispose();
   }
 
@@ -75,9 +75,10 @@ class _EXPDialogState extends State<EXPDialog> with CharacterServiceMixin {
             SizedBox(
               width: dialogWidth,
               child: ExpBar(
-                currentXp: int.tryParse(overrideXp.text) ?? currentXp,
+                currentXp: int.tryParse(overwriteXp.text) ?? currentXp,
                 maxXp: maxXp,
-                pendingXp: !shouldResetSessionMarks || (!shouldOverrideXp && !shouldOverrideLevel) ? totalPendingXp : 0,
+                pendingXp:
+                    !shouldResetSessionMarks || (!shouldOverwriteXp && !shouldOverwriteLevel) ? totalPendingXp : 0,
               ),
             ),
             const SizedBox(height: 24),
@@ -86,7 +87,7 @@ class _EXPDialogState extends State<EXPDialog> with CharacterServiceMixin {
                 width: dialogWidth,
                 height: action == _XPAction.endSession ? (PlatformHelper.isMobile ? 364 : 332) : 48,
                 child: CustomExpansionTile(
-                  title: const Text('End Session'),
+                  title: Text(S.current.xpDialogHeaderEndSession),
                   initiallyExpanded: true,
                   controller: endSessionCollapseController,
                   expandable: action != _XPAction.endSession,
@@ -126,7 +127,7 @@ class _EXPDialogState extends State<EXPDialog> with CharacterServiceMixin {
               width: dialogWidth,
               height: action == _XPAction.levelUp ? (PlatformHelper.isMobile ? 364 : 332) : 48,
               child: CustomExpansionTile(
-                title: const Text('Level Up'),
+                title: Text(S.current.xpDialogHeaderLevelUp),
                 controller: levelUpCollapseController,
                 expandable: action != _XPAction.levelUp,
                 onExpansionChanged: (value) {
@@ -139,7 +140,7 @@ class _EXPDialogState extends State<EXPDialog> with CharacterServiceMixin {
                   return false;
                 },
                 children: [
-                  const Text('Increase a stat by 1:'),
+                  const Text(S.current.xpDialogLevelUpStat),
                   const SizedBox(height: 12),
                   ConstrainedBox(
                     constraints: const BoxConstraints(maxWidth: 380),
@@ -174,7 +175,7 @@ class _EXPDialogState extends State<EXPDialog> with CharacterServiceMixin {
                     ),
                   ),
                   const SizedBox(height: 24),
-                  const Text('Remember to get a new move also'),
+                  const Text(S.current.xpDialogLevelUpMove),
                 ],
               ),
             ),
@@ -182,19 +183,19 @@ class _EXPDialogState extends State<EXPDialog> with CharacterServiceMixin {
             AnimatedContainer(
               duration: const Duration(milliseconds: 200),
               width: dialogWidth,
-              height: action == _XPAction.overrideXP ? (PlatformHelper.isMobile ? 364 : 332) : 48,
+              height: action == _XPAction.overwriteXP ? (PlatformHelper.isMobile ? 364 : 332) : 48,
               child: CustomExpansionTile(
                 title: Text(
-                  S.current.xpDialogChangeOverride + (hasOverrides ? '*' : ''),
+                  S.current.xpDialogChangeOverwrite + (hasOverwrites ? '*' : ''),
                 ),
-                controller: overrideXPCollapseController,
-                expandable: action != _XPAction.overrideXP,
+                controller: overwriteXPCollapseController,
+                expandable: action != _XPAction.overwriteXP,
                 onExpansionChanged: (value) {
                   if (!value) return false;
                   setState(() {
                     lastActionController.collapse();
-                    action = _XPAction.overrideXP;
-                    lastActionController = overrideXPCollapseController;
+                    action = _XPAction.overwriteXP;
+                    lastActionController = overwriteXPCollapseController;
                   });
                   return false;
                 },
@@ -211,20 +212,20 @@ class _EXPDialogState extends State<EXPDialog> with CharacterServiceMixin {
                   ),
                   const Divider(height: 32),
                   NumberTextField(
-                    controller: overrideXp,
+                    controller: overwriteXp,
                     numberType: NumberType.int,
                     decoration: InputDecoration(
-                      labelText: S.current.xpDialogOverrideXp + (shouldOverrideXp ? '*' : ''),
+                      labelText: S.current.xpDialogOverwriteXp + (shouldOverwriteXp ? '*' : ''),
                     ),
                     minValue: 0,
                   ),
                   const SizedBox(height: 16),
                   NumberTextField(
                     decoration: InputDecoration(
-                      labelText: S.current.xpDialogOverrideLevel + (shouldOverrideLevel ? '*' : ''),
+                      labelText: S.current.xpDialogOverwriteLevel + (shouldOverwriteLevel ? '*' : ''),
                     ),
                     numberType: NumberType.int,
-                    controller: overrideLevel,
+                    controller: OverwriteLevel,
                     minValue: 1,
                   ),
                 ],
@@ -237,8 +238,8 @@ class _EXPDialogState extends State<EXPDialog> with CharacterServiceMixin {
                 context,
                 onSave: (action == _XPAction.endSession)
                     ? endSession
-                    : (action == _XPAction.overrideXP)
-                        ? overrideXpAndLevel
+                    : (action == _XPAction.overwriteXP)
+                        ? overwriteXpAndLevel
                         : (action == _XPAction.levelUp && canLevelUp)
                             ? levelUp
                             : null,
@@ -255,16 +256,16 @@ class _EXPDialogState extends State<EXPDialog> with CharacterServiceMixin {
 
   int get currentXp => char.currentXp;
   int get currentLevel => char.stats.level;
-  int get maxXp => shouldOverrideLevel
-      ? CharacterStats.maxExpForLevel(int.tryParse(overrideLevel.text) ?? currentLevel)
+  int get maxXp => shouldOverwriteLevel
+      ? CharacterStats.maxExpForLevel(int.tryParse(overwriteLevel.text) ?? currentLevel)
       : char.maxXp;
   int get totalPendingXp => char.sessionMarks.where((mark) => mark.completed).length;
   bool get canLevelUp => currentXp - currentLevel - 7 >= 0;
 
-  bool get shouldOverrideXp => int.tryParse(overrideXp.text) != null && int.parse(overrideXp.text) != currentXp;
-  bool get shouldOverrideLevel =>
-      int.tryParse(overrideLevel.text) != null && int.parse(overrideLevel.text) != currentLevel;
-  bool get hasOverrides => shouldOverrideLevel || shouldOverrideXp || shouldResetSessionMarks;
+  bool get shouldOverwriteXp => int.tryParse(overwriteXp.text) != null && int.parse(overwriteXp.text) != currentXp;
+  bool get shouldOverwriteLevel =>
+      int.tryParse(overwriteLevel.text) != null && int.parse(overwriteLevel.text) != currentLevel;
+  bool get hasOverwrites => shouldOverwriteLevel || shouldOverwriteXp || shouldResetSessionMarks;
 
   void endSession() {
     save(currentXp + totalPendingXp, currentLevel, resetSession: true);
@@ -279,10 +280,10 @@ class _EXPDialogState extends State<EXPDialog> with CharacterServiceMixin {
     );
   }
 
-  void overrideXpAndLevel() {
+  void overwriteXpAndLevel() {
     save(
-      int.tryParse(overrideXp.text) ?? 0,
-      int.tryParse(overrideLevel.text) ?? currentLevel,
+      int.tryParse(overwriteXp.text) ?? 0,
+      int.tryParse(overwriteLevel.text) ?? currentLevel,
       resetSession: shouldResetSessionMarks,
     );
   }
@@ -327,8 +328,8 @@ extension on _XPAction {
       case _XPAction.endSession:
         return S.current.xpDialogTitle;
       case _XPAction.levelUp:
-        return 'Level Up';
-      case _XPAction.overrideXP:
+        return S.current.xpDialogTitleLevelUp;
+      case _XPAction.overwriteXP:
         return S.current.xpDialogTitleOverriding;
     }
   }
@@ -338,9 +339,9 @@ extension on _XPAction {
       case _XPAction.endSession:
         return S.current.xpDialogEndSession;
       case _XPAction.levelUp:
-        return 'Level Up';
-      case _XPAction.overrideXP:
-        return 'Override';
+        return S.current.xpDialogSaveLevelUp;
+      case _XPAction.overwriteXP:
+        return S.current.xpDialogSaveOverwriteXp;
     }
   }
 }
