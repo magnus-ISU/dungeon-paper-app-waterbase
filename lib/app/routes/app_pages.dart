@@ -26,8 +26,6 @@ import '../modules/BondsFlagsForm/bindings/bonds_flags_form_binding.dart';
 import '../modules/BondsFlagsForm/views/bonds_flags_form_view.dart';
 import '../modules/Campaign/CampaignsList/bindings/campaigns_list_binding.dart';
 import '../modules/Campaign/CampaignsList/views/campaigns_list_view.dart';
-import '../modules/Campaign/bindings/campaign_binding.dart';
-import '../modules/Campaign/views/campaign_view.dart';
 import '../modules/CharacterList/bindings/character_list_binding.dart';
 import '../modules/CharacterList/views/character_list_view.dart';
 import '../modules/ClassAlignments/bindings/class_alignments_binding.dart';
