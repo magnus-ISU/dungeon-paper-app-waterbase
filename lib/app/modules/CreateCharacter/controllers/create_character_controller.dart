@@ -34,12 +34,11 @@ class CreateCharacterController extends GetxController {
 
   User get user => Get.find<UserService>().current;
 
-  bool get isValid => [
-        name.isNotEmpty,
-        characterClass.value != null,
-        alignment.value != null,
-        race.value != null,
-      ].every((element) => element == true);
+  bool get isValidName => name.isNotEmpty;
+  bool get isValidClass => characterClass.value != null;
+  bool get isValidAlignment => alignment.value != null;
+  bool get isValidRace => race.value != null;
+  bool get isValid => [isValidName, isValidClass, isValidAlignment, isValidRace].every((element) => element == true);
 
   List<Item> get items => GearChoice.selectionToItems(startingGear, equipped: true);
 

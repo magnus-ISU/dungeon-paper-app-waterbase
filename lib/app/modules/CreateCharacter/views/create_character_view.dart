@@ -13,6 +13,7 @@ import 'package:dungeon_paper/app/modules/AbilityScoresForm/controllers/ability_
 import 'package:dungeon_paper/app/modules/BasicInfoForm/controllers/basic_info_form_controller.dart';
 import 'package:dungeon_paper/app/modules/ClassAlignments/controllers/class_alignments_controller.dart';
 import 'package:dungeon_paper/app/modules/CreateCharacter/SelectMovesSpells/controllers/select_moves_spells_controller.dart';
+import 'package:dungeon_paper/app/modules/CreateCharacter/controllers/create_character_controller.dart';
 import 'package:dungeon_paper/app/modules/LibraryList/views/character_classes_library_list_view.dart';
 import 'package:dungeon_paper/app/modules/StartingGearForm/controllers/starting_gear_form_controller.dart';
 import 'package:dungeon_paper/app/routes/app_pages.dart';
@@ -20,15 +21,13 @@ import 'package:dungeon_paper/app/themes/colors.dart';
 import 'package:dungeon_paper/app/widgets/atoms/advanced_floating_action_button.dart';
 import 'package:dungeon_paper/app/widgets/atoms/character_avatar.dart';
 import 'package:dungeon_paper/app/widgets/atoms/confirm_exit_view.dart';
+import 'package:dungeon_paper/app/widgets/chips/advanced_chip.dart';
+import 'package:dungeon_paper/core/dw_icons.dart';
 import 'package:dungeon_paper/generated/l10n.dart';
 import 'package:flutter/material.dart';
 
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
-
-import '../../../../core/dw_icons.dart';
-import '../../../widgets/chips/advanced_chip.dart';
-import '../controllers/create_character_controller.dart';
 
 class CreateCharacterView extends GetView<CreateCharacterController> {
   const CreateCharacterView({super.key});
@@ -41,7 +40,6 @@ class CreateCharacterView extends GetView<CreateCharacterController> {
         dirty: controller.dirty.value,
         child: BackdropFilter(
           filter: ImageFilter.blur(sigmaX: 5, sigmaY: 5),
-          // blendMode: BlendMode.darken,
           child: Scaffold(
             backgroundColor: Colors.black.withOpacity(0.85),
             appBar: AppBar(
@@ -89,10 +87,8 @@ class CreateCharacterView extends GetView<CreateCharacterController> {
                                   : Text(controller.name.value),
                               subtitle: controller.name.isEmpty
                                   ? Text(S.current.createCharacterTravelerHelpText)
-                                  : Text(
-                                      S.current.createCharacterTravelerDescription(cls?.name ?? ''),
-                                    ),
-                              valid: controller.name.isNotEmpty,
+                                  : Text(S.current.createCharacterTravelerDescription(cls?.name ?? '')),
+                              valid: controller.isValidName,
                               onTap: () => Get.toNamed(
                                 Routes.createCharacterBasicInfo,
                                 arguments: BasicInfoFormArguments(
@@ -113,7 +109,7 @@ class CreateCharacterView extends GetView<CreateCharacterController> {
                                   : Text(
                                       S.current.createCharacterClassDescription(cls!.hp, cls!.load, cls!.damageDice),
                                     ),
-                              valid: cls != null,
+                              valid: controller.isValidClass,
                               onTap: () => Get.toNamed(
                                 Routes.createCharacterSelectClass,
                                 arguments: CharacterClassLibraryListArguments(
@@ -142,16 +138,12 @@ class CreateCharacterView extends GetView<CreateCharacterController> {
                                         onSelected: (race) => controller.race.value = race,
                                       )
                                   : null,
-                              valid: controller.race.value != null,
+                              valid: controller.isValidRace,
                             ),
                             // Ability Scores
                             _Card(
                               contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
                               title: Text(S.current.selectGeneric(S.current.entityPlural(AbilityScore))),
-                              // subtitle: Text(
-                              //   controller.abilityScores.value.stats
-                              //       .map((stat) => '${stat.key}: ${stat.value}')
-                              //       .join(', '),
                               subtitle: Padding(
                                 padding: const EdgeInsets.only(top: 4.0),
                                 child: _AbilityScoreChipList(controller: controller),
@@ -168,7 +160,7 @@ class CreateCharacterView extends GetView<CreateCharacterController> {
                             // Alignment
                             _Card(
                               contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 0),
-                              valid: controller.alignment.value != null,
+                              valid: controller.isValidAlignment,
                               title: Text(controller.alignment.value != null
                                   ? '${S.current.entity(AlignmentValue)}: ${S.current.alignment(controller.alignment.value!.type)}'
                                   : S.current.selectGeneric(S.current.entity(AlignmentValue))),
@@ -228,17 +220,16 @@ class CreateCharacterView extends GetView<CreateCharacterController> {
                                         preventDuplicates: false,
                                       )
                                   : null,
-                              valid: cls == null
-                                  ? false
-                                  : cls!.gearChoices.every(
+                              valid: controller.isValidClass
+                                  ? cls!.gearChoices.every(
                                       (c) => c.selections.any(
                                         (s) => controller.startingGear.map((x) => x.key).contains(s.key),
                                       ),
-                                    ),
+                                    )
+                                  : false,
                             ),
                             // Moves & Spells
                             _Card(
-                              // contentPadding: EdgeInsets.symmetric(horizontal: 16, vertical: 12),
                               title: Text(
                                 S.current.selectGeneric(
                                   (cls?.isSpellcaster ?? false)
@@ -304,9 +295,7 @@ class _AbilityScoreChipList extends StatelessWidget {
               child: AdvancedChip(
                 visualDensity: VisualDensity.compact,
                 padding: EdgeInsets.zero,
-                labelPadding:
-                    // EdgeInsets.zero,
-                    const EdgeInsets.only(right: 8),
+                labelPadding: const EdgeInsets.only(right: 8),
                 avatar: Icon(
                   DwIcons.statIcon(
                     stat.key.toLowerCase(),
@@ -377,7 +366,6 @@ class _Card extends StatelessWidget {
                 ),
               )
             : null,
-        // trailing: isIncomplete ?  _MissingInfoIcon() : null,
       ),
     );
   }
