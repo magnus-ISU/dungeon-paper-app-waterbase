@@ -15,6 +15,7 @@ import 'package:dungeon_paper/app/data/models/user.dart';
 import 'package:dungeon_paper/app/data/services/repository_service.dart';
 import 'package:dungeon_paper/app/data/services/user_service.dart';
 import 'package:dungeon_paper/core/utils/uuid.dart';
+import 'package:dungeon_world_data/data/en-US/races.dart';
 import 'package:get/get.dart';
 import 'package:dungeon_world_data/dungeon_world_data.dart' as dw;
 
@@ -57,7 +58,20 @@ class CreateCharacterController extends GetxController {
     );
     addStartingMoves();
     chooseAlignment();
+    chooseRace();
     setDirty();
+  }
+
+  void chooseRace() {
+    final charClass = characterClass.value!;
+    // TODO search all races that exist, rather than DW playbook races
+    final races =
+        getRaceList().where((race) => race.classKeys.map((allowedClass) => allowedClass.name).contains(charClass.name));
+    print(races);
+    if (races.length == 1) {
+      final raceToSelect = races.first;
+      race.value = Race.fromDwRace(raceToSelect);
+    }
   }
 
   void chooseAlignment() {
