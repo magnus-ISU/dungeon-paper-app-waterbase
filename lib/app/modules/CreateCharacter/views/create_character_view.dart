@@ -23,6 +23,7 @@ import 'package:dungeon_paper/app/widgets/atoms/character_avatar.dart';
 import 'package:dungeon_paper/app/widgets/atoms/confirm_exit_view.dart';
 import 'package:dungeon_paper/app/widgets/chips/advanced_chip.dart';
 import 'package:dungeon_paper/core/dw_icons.dart';
+import 'package:dungeon_paper/core/utils/content_generators/character_name_generator.dart';
 import 'package:dungeon_paper/generated/l10n.dart';
 import 'package:flutter/material.dart';
 
@@ -51,6 +52,9 @@ class CreateCharacterView extends GetView<CreateCharacterController> {
               () => AdvancedFloatingActionButton.extended(
                 onPressed: controller.isValid
                     ? () {
+                        if (!controller.isValidName) {
+                          controller.setBasicInfo(CharacterNameGenerator().generate(), controller.avatarUrl.value);
+                        }
                         Get.find<CharacterService>().createCharacter(
                           controller.getAsCharacter(),
                           switchToCharacter: true,

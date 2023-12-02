@@ -418,7 +418,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "createCharacterTitle" : MessageLookupByLibrary.simpleMessage("Create Character"),
     "createCharacterTravelerBlankName" : MessageLookupByLibrary.simpleMessage("Unnamed Traveler"),
     "createCharacterTravelerDescription" : m30,
-    "createCharacterTravelerHelpText" : MessageLookupByLibrary.simpleMessage("Select name & picture (required)"),
+    "createCharacterTravelerHelpText" : MessageLookupByLibrary.simpleMessage("Select name & picture"),
     "createGeneric" : m31,
     "customButtonLeft" : MessageLookupByLibrary.simpleMessage("Left Button"),
     "customButtonRight" : MessageLookupByLibrary.simpleMessage("Right Button"),

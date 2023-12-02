@@ -187,7 +187,7 @@
   "createCharacterTitle": "Create Character",
   "createCharacterTravelerBlankName": "Unnamed Traveler",
   "createCharacterTravelerDescription": "Level 1 {cls}",
-  "createCharacterTravelerHelpText": "Select name & picture (required)",
+  "createCharacterTravelerHelpText": "Select name & picture",
   "createCharRandomizeNameTooltipClick": "Click to generate a random name",
   "createCharRandomizeNameTooltipTouch": "Tap to generate a random name",
   "createGeneric": "Create {entity}",
