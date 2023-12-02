@@ -31,7 +31,6 @@ class CreateCharacterController extends GetxController {
   final race = Rx<Race?>(null);
 
   final repo = Get.find<RepositoryService>();
-  final dirty = false.obs;
 
   User get user => Get.find<UserService>().current;
 
@@ -48,7 +47,6 @@ class CreateCharacterController extends GetxController {
   void setBasicInfo(String name, String avatar) {
     this.name.value = name;
     avatarUrl.value = avatar;
-    setDirty();
   }
 
   void setClass(CharacterClass cls) {
@@ -59,7 +57,6 @@ class CreateCharacterController extends GetxController {
     addStartingMoves();
     chooseAlignment();
     chooseRace();
-    setDirty();
   }
 
   void chooseRace() {
@@ -67,7 +64,6 @@ class CreateCharacterController extends GetxController {
     // TODO search all races that exist, rather than DW playbook races
     final races =
         getRaceList().where((race) => race.classKeys.map((allowedClass) => allowedClass.name).contains(charClass.name));
-    print(races);
     if (races.length == 1) {
       final raceToSelect = races.first;
       race.value = Race.fromDwRace(raceToSelect);
@@ -89,7 +85,6 @@ class CreateCharacterController extends GetxController {
 
   void setAbilityScores(AbilityScores stats) {
     abilityScores.value = stats;
-    setDirty();
   }
 
   void setAlignment(AlignmentValues alignments, dw.AlignmentType? selected) {
@@ -99,7 +94,6 @@ class CreateCharacterController extends GetxController {
     alignment.value = AlignmentValue.empty(type: selected).copyWith(
       description: alignments.byType(selected),
     );
-    setDirty();
   }
 
   void setMovesSpells(List<Move> moves, List<Spell> spells) {
@@ -107,10 +101,6 @@ class CreateCharacterController extends GetxController {
     this.spells.clear();
     this.moves.addAll(moves.map((e) => e.copyWithInherited(favorite: true)));
     this.spells.addAll(spells.map((e) => e.copyWithInherited(prepared: true)));
-  }
-
-  void setDirty() {
-    dirty.value = true;
   }
 
   void setStartingGear(List<GearSelection> selections) {

@@ -38,7 +38,6 @@ class CreateCharacterView extends GetView<CreateCharacterController> {
   Widget build(BuildContext context) {
     return Obx(
       () => ConfirmExitView(
-        dirty: controller.dirty.value,
         child: BackdropFilter(
           filter: ImageFilter.blur(sigmaX: 5, sigmaY: 5),
           child: Scaffold(

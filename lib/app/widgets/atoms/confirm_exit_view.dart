@@ -7,14 +7,14 @@ import '../../../core/utils/dialog_utils.dart';
 
 class ConfirmExitView extends StatelessWidget {
   const ConfirmExitView({
-    Key? key,
+    super.key,
     this.title,
     this.text,
     this.okLabel,
     this.cancelLabel,
     this.dirty = true,
     required this.child,
-  }) : super(key: key);
+  });
 
   final Widget? title;
   final Widget? text;
