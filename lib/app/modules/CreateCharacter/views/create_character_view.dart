@@ -52,7 +52,7 @@ class CreateCharacterView extends GetView<CreateCharacterController> {
                 onPressed: controller.isValid
                     ? () {
                         if (!controller.isValidName) {
-                          controller.setBasicInfo(CharacterNameGenerator().generate(), controller.avatarUrl.value);
+                          controller.name.value = CharacterNameGenerator().generate();
                         }
                         Get.find<CharacterService>().createCharacter(
                           controller.getAsCharacter(),
