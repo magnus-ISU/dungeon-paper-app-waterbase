@@ -1,5 +1,6 @@
 import 'package:dungeon_paper/app/data/models/character.dart';
 import 'package:dungeon_paper/app/data/services/user_service.dart';
+import 'package:dungeon_paper/app/modules/BasicInfoForm/controllers/basic_info_form_controller.dart';
 import 'package:dungeon_paper/app/routes/app_pages.dart';
 import 'package:dungeon_paper/app/themes/colors.dart';
 import 'package:dungeon_paper/app/widgets/atoms/hyperlink.dart';
@@ -15,12 +16,10 @@ import 'package:flutter/material.dart';
 
 import 'package:get/get.dart';
 
-import '../controllers/basic_info_form_controller.dart';
-
 class BasicInfoFormView extends GetView<BasicInfoFormController> with UserServiceMixin {
   const BasicInfoFormView({
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -39,7 +38,6 @@ class BasicInfoFormView extends GetView<BasicInfoFormController> with UserServic
             icon: const Icon(Icons.save),
           ),
           body: Form(
-            //   // key: controller.formKey,
             child: ListView(
               padding: const EdgeInsets.all(16),
               shrinkWrap: true,
@@ -49,7 +47,6 @@ class BasicInfoFormView extends GetView<BasicInfoFormController> with UserServic
                   controller: controller.name.value,
                   textInputAction: TextInputAction.next,
                   validator: (val) => val == null || val.isEmpty ? 'Cannot be empty' : null,
-                  // onChanged: (val) => updateControllers(),
                   textCapitalization: TextCapitalization.words,
                   decoration: InputDecoration(
                     labelText: S.current.createCharacterNameFieldLabel,
@@ -125,7 +122,7 @@ class BasicInfoFormView extends GetView<BasicInfoFormController> with UserServic
                               child: Icon(Icons.warning, color: DwColors.warning, size: 16),
                             ),
                           ),
-                          TextSpan(text: S.current.basicInfoImageNeedAccountPrefix + ' '),
+                          TextSpan(text: '${S.current.basicInfoImageNeedAccountPrefix} '),
                           Hyperlink.textSpan(
                             context,
                             S.current.basicInfoImageNeedAccountLinkLabel,
@@ -157,7 +154,6 @@ class BasicInfoFormView extends GetView<BasicInfoFormController> with UserServic
                   controller: controller.avatarUrl.value,
                   textInputAction: TextInputAction.done,
                   enabled: !controller.isUploading,
-                  // onChanged: (val) => updateControllers(),
                   decoration: InputDecoration(
                     labelText: S.current.createCharacterAvatarFieldLabel,
                     hintText: S.current.createCharacterAvatarFieldPlaceholder,
