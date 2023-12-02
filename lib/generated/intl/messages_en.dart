@@ -524,7 +524,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "import" : MessageLookupByLibrary.simpleMessage("Import"),
     "importBrowseFile" : MessageLookupByLibrary.simpleMessage("Browse..."),
     "importBrowseHelp" : MessageLookupByLibrary.simpleMessage("To start importing, pick the file you want to import from.\nYou will then be able to select what to save and what to leave out."),
-    "importClearFile" : MessageLookupByLibrary.simpleMessage("Clear selected file"),
+    "importClearFile" : MessageLookupByLibrary.simpleMessage("Import another file"),
     "importExportTitle" : MessageLookupByLibrary.simpleMessage("Export/Import"),
     "importFailedMessage" : MessageLookupByLibrary.simpleMessage("Something went wrong.\nTry again or contact support if this persists"),
     "importFailedTitle" : MessageLookupByLibrary.simpleMessage("Import Failed"),

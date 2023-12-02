@@ -295,7 +295,7 @@
   "import": "Import",
   "importBrowseFile": "Browse...",
   "importBrowseHelp": "To start importing, pick the file you want to import from.\nYou will then be able to select what to save and what to leave out.",
-  "importClearFile": "Clear selected file",
+  "importClearFile": "Import another file",
   "importExportTitle": "Export/Import",
   "importFailedMessage": "Something went wrong.\nTry again or contact support if this persists",
   "importFailedTitle": "Import Failed",
