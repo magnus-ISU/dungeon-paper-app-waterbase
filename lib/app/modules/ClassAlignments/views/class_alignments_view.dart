@@ -11,7 +11,7 @@ import 'package:get/get.dart';
 import '../controllers/class_alignments_controller.dart';
 
 class ClassAlignmentsView extends GetView<ClassAlignmentsController> {
-  const ClassAlignmentsView({Key? key}) : super(key: key);
+  const ClassAlignmentsView({super.key});
   @override
   Widget build(BuildContext context) {
     return Scaffold(

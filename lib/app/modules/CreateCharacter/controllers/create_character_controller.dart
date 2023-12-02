@@ -56,7 +56,21 @@ class CreateCharacterController extends GetxController {
       cls.gearChoices.fold([], (all, cur) => [...all, ...cur.preselectedGearSelections]),
     );
     addStartingMoves();
+    chooseAlignment();
     setDirty();
+  }
+
+  void chooseAlignment() {
+    final alignments = characterClass.value!.alignments;
+    var classAlignments = <dw.AlignmentType>[];
+    if (alignments.good.isNotEmpty) classAlignments.add(dw.AlignmentType.good);
+    if (alignments.lawful.isNotEmpty) classAlignments.add(dw.AlignmentType.lawful);
+    if (alignments.neutral.isNotEmpty) classAlignments.add(dw.AlignmentType.neutral);
+    if (alignments.chaotic.isNotEmpty) classAlignments.add(dw.AlignmentType.chaotic);
+    if (alignments.evil.isNotEmpty) classAlignments.add(dw.AlignmentType.evil);
+    if (classAlignments.length == 1) {
+      setAlignment(alignments, classAlignments.first);
+    }
   }
 
   void setAbilityScores(AbilityScores stats) {

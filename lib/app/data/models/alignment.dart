@@ -7,11 +7,10 @@ import 'meta.dart';
 
 class AlignmentValue extends dw.Alignment with WithIcon implements WithMeta {
   AlignmentValue({
-    required Meta meta,
+    required Meta super.meta,
     required super.description,
     required super.type,
-  })  : _meta = meta,
-        super(meta: meta);
+  }) : _meta = meta;
 
   @override
   Meta get meta => _meta;
@@ -111,18 +110,12 @@ class AlignmentValue extends dw.Alignment with WithIcon implements WithMeta {
 class AlignmentValues extends dw.AlignmentValues {
   AlignmentValues({
     required this.meta,
-    required String good,
-    required String evil,
-    required String lawful,
-    required String neutral,
-    required String chaotic,
-  }) : super(
-          good: good,
-          evil: evil,
-          lawful: lawful,
-          neutral: neutral,
-          chaotic: chaotic,
-        );
+    required super.good,
+    required super.evil,
+    required super.lawful,
+    required super.neutral,
+    required super.chaotic,
+  });
 
   final Meta meta;
 

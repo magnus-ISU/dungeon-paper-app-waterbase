@@ -15,8 +15,8 @@ import 'filters/character_class_filters.dart';
 
 class CharacterClassesLibraryListView extends GetView<LibraryListController<CharacterClass, CharacterClassFilters>> {
   const CharacterClassesLibraryListView({
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   RepositoryService get service => controller.repo.value;
   Character get char => controller.chars.value.current;
