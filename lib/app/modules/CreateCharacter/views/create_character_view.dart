@@ -31,7 +31,7 @@ import '../../../widgets/chips/advanced_chip.dart';
 import '../controllers/create_character_controller.dart';
 
 class CreateCharacterView extends GetView<CreateCharacterController> {
-  const CreateCharacterView({Key? key}) : super(key: key);
+  const CreateCharacterView({super.key});
 
   CharacterClass? get cls => controller.characterClass.value;
   @override
@@ -170,9 +170,7 @@ class CreateCharacterView extends GetView<CreateCharacterController> {
                               contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 0),
                               valid: controller.alignment.value != null,
                               title: Text(controller.alignment.value != null
-                                  ? S.current.entity(AlignmentValue) +
-                                      ': ' +
-                                      S.current.alignment(controller.alignment.value!.type)
+                                  ? '${S.current.entity(AlignmentValue)}: ${S.current.alignment(controller.alignment.value!.type)}'
                                   : S.current.selectGeneric(S.current.entity(AlignmentValue))),
                               subtitle: controller.alignment.value != null
                                   ? Text(
@@ -287,7 +285,6 @@ class CreateCharacterView extends GetView<CreateCharacterController> {
 
 class _AbilityScoreChipList extends StatelessWidget {
   const _AbilityScoreChipList({
-    super.key,
     required this.controller,
   });
 
@@ -319,7 +316,7 @@ class _AbilityScoreChipList extends StatelessWidget {
                 materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
                 label: Text(
                   '${stat.key}: ${stat.value}',
-                  textScaleFactor: 0.8,
+                  textScaler: const TextScaler.linear(0.8),
                 ),
               ),
             ),
@@ -331,14 +328,13 @@ class _AbilityScoreChipList extends StatelessWidget {
 
 class _Card extends StatelessWidget {
   const _Card({
-    Key? key,
     this.contentPadding,
     this.leading,
     required this.title,
     required this.subtitle,
     this.valid = true,
     required this.onTap,
-  }) : super(key: key);
+  });
 
   final EdgeInsets? contentPadding;
   final Widget? leading;
