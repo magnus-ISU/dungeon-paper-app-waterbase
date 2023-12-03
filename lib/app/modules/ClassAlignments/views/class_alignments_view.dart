@@ -36,8 +36,6 @@ class ClassAlignmentsView extends GetView<ClassAlignmentsController> {
                 final description = controller.alignments.value.byType(alignment);
                 final isEditing = controller.isEditing(alignment);
                 final isSelected = controller.isSelected(alignment);
-                print('$alignment: $description');
-                print(controller.alignments.value);
 
                 return _wrapWithSelection(
                   isSelected,
