@@ -14,7 +14,7 @@ import 'package:get/get.dart';
 import '../local_widgets/list_card.dart';
 
 class ImportView extends GetView<ImportController> {
-  const ImportView({Key? key}) : super(key: key);
+  const ImportView({super.key});
 
   @override
   Widget build(BuildContext context) {
