@@ -39,6 +39,16 @@ class ClassAlignmentsController extends GetxController {
   void toggleEdit(dw.AlignmentType type, [bool? value]) {
     editing[type] ??= false;
     editing[type] = value ?? !editing[type]!;
+
+    if (!editing[type]!) {
+      alignments.value = alignments.value.copyWithInherited(
+        good: textControllers[dw.AlignmentType.good]!.text,
+        lawful: textControllers[dw.AlignmentType.lawful]!.text,
+        neutral: textControllers[dw.AlignmentType.neutral]!.text,
+        chaotic: textControllers[dw.AlignmentType.chaotic]!.text,
+        evil: textControllers[dw.AlignmentType.evil]!.text,
+      );
+    }
   }
 
   void select(dw.AlignmentType type) {
@@ -49,7 +59,7 @@ class ClassAlignmentsController extends GetxController {
   bool isSelected(dw.AlignmentType type) => selectable && selected.value == type;
 
   void save() {
-    final updated = alignments.value.copyWithInherited(
+    alignments.value = alignments.value.copyWithInherited(
       good: textControllers[dw.AlignmentType.good]!.text,
       lawful: textControllers[dw.AlignmentType.lawful]!.text,
       neutral: textControllers[dw.AlignmentType.neutral]!.text,
@@ -57,7 +67,7 @@ class ClassAlignmentsController extends GetxController {
       evil: textControllers[dw.AlignmentType.evil]!.text,
     );
 
-    onChanged?.call(updated, selected.value);
+    onChanged?.call(alignments.value, selected.value);
     Get.back();
   }
 }
